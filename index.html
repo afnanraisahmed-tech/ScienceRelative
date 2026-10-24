@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Science Relative — Video Editing & Creative Work</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a12;
+    --bg2: #12121f;
+    --card: #16162a;
+    --primary: #7c3aed;
+    --primary2: #06b6d4;
+    --accent: #f472b6;
+    --text: #e8e8f0;
+    --muted: #9a9ab0;
+  }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    overflow-x: hidden; line-height: 1.6;
+  }
+  ::selection { background: var(--primary); color: #fff; }
+  .bg-glow { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+  .bg-glow::before, .bg-glow::after {
+    content: ''; position: absolute; border-radius: 50%;
+    filter: blur(120px); opacity: 0.35; animation: float 12s ease-in-out infinite;
+  }
+  .bg-glow::before { width: 500px; height: 500px; background: var(--primary); top: -150px; left: -150px; }
+  .bg-glow::after { width: 450px; height: 450px; background: var(--primary2); bottom: -120px; right: -120px; animation-delay: -6s; }
+  @keyframes float {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(40px,40px) scale(1.15); }
+  }
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 6%; background: rgba(10,10,18,0.7);
+    backdrop-filter: blur(14px); border-bottom: 1px solid rgba(124,58,237,0.2);
+  }
+  .logo {
+    font-size: 1.4rem; font-weight: 800; letter-spacing: 1px;
+    background: linear-gradient(90deg, var(--primary), var(--primary2), var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.95rem;
+    transition: 0.25s; position: relative;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -6px; left: 0;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--primary2));
+    transition: 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .btn {
+    padding: 10px 22px; border-radius: 10px; border: none;
+    font-weight: 600; cursor: pointer; font-size: 0.9rem;
+    transition: 0.3s; text-decoration: none; display: inline-block;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, var(--primary), var(--primary2));
+    color: #fff; box-shadow: 0 0 20px rgba(124,58,237,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(124,58,237,0.7);
+  }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid rgba(124,58,237,0.5); }
+  .btn-outline:hover { background: rgba(124,58,237,0.15); }
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 6% 60px; }
+  .hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; width: 100%; }
+  .tag {
+    display: inline-block; padding: 6px 16px; border-radius: 50px;
+    font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(124,58,237,0.15); color: var(--primary2);
+    border: 1px solid rgba(124,58,237,0.4); margin-bottom: 22px;
+  }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.1; font-weight: 800; margin-bottom: 22px; }
+  .gradient-text {
+    background: linear-gradient(90deg, var(--primary), var(--primary2), var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p { color: var(--muted); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .code-card {
+    background: var(--card); border-radius: 16px; padding: 24px;
+    border: 1px solid rgba(124,58,237,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(124,58,237,0.1);
+    font-family: 'Courier New', monospace; font-size: 0.9rem;
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(124,58,237,0.1); }
+    50% { box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 60px rgba(124,58,237,0.3); }
+  }
+  .code-card .dots { display: flex; gap: 7px; margin-bottom: 16px; }
+  .code-card .dots span { width: 11px; height: 11px; border-radius: 50%; }
+  .dots .r { background: #ff5f56; } .dots .y { background: #ffbd2e; } .dots .g { background: #27c93f; }
+  .code-line { margin: 4px 0; color: var(--muted); }
+  .code-key { color: var(--accent); }
+  .code-str { color: #a5f3a0; }
+  .code-fn { color: var(--primary2); }
+  section { padding: 100px 6%; }
+  .section-head { text-align: center; max-width: 650px; margin: 0 auto 60px; }
+  .section-head .tag { margin-bottom: 18px; }
+  .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 14px; }
+  .section-head p { color: var(--muted); font-size: 1.05rem; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+  .about-text h3 { font-size: 1.7rem; margin-bottom: 18px; font-weight: 700; }
+  .about-text p { color: var(--muted); margin-bottom: 16px; }
+  .about-stats { display: flex; gap: 30px; margin-top: 30px; flex-wrap: wrap; }
+  .stat h4 {
+    font-size: 2rem; font-weight: 800;
+    background: linear-gradient(90deg, var(--primary), var(--primary2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat p { font-size: 0.85rem; color: var(--muted); }
+  .about-visual {
+    background: var(--card); border-radius: 18px; padding: 30px;
+    border: 1px solid rgba(124,58,237,0.3);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .visual-box {
+    background: rgba(124,58,237,0.1); border-radius: 12px;
+    padding: 22px 14px; text-align: center;
+    border: 1px solid rgba(124,58,237,0.2); transition: 0.3s;
+  }
+  .visual-box:hover { transform: translateY(-4px); border-color: var(--primary2); }
+  .visual-box .ico { font-size: 1.8rem; margin-bottom: 6px; }
+  .visual-box small { color: var(--muted); font-size: 0.8rem; }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .skill-card {
+    background: var(--card); border-radius: 16px; padding: 32px 26px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: 0.35s; position: relative; overflow: hidden;
+  }
+  .skill-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--primary2));
+    transform: scaleX(0); transform-origin: left; transition: 0.35s;
+  }
+  .skill-card:hover { transform: translateY(-8px); border-color: rgba(124,58,237,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .skill-card:hover::before { transform: scaleX(1); }
+  .skill-card .ico { font-size: 2.2rem; margin-bottom: 16px; display: block; }
+  .skill-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+  .skill-card p { color: var(--muted); font-size: 0.9rem; }
+  .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 26px; }
+  .video-card {
+    background: var(--card); border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06); transition: 0.35s; position: relative;
+  }
+  .video-card:hover { transform: translateY(-6px); border-color: rgba(124,58,237,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+  .video-thumb { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; cursor: pointer; }
+  .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-thumb .play-overlay {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.35); transition: 0.3s;
+  }
+  .video-thumb:hover .play-overlay { background: rgba(124,58,237,0.45); }
+  .play-btn {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; color: var(--primary); padding-left: 4px;
+    box-shadow: 0 0 30px rgba(124,58,237,0.6); transition: 0.3s;
+  }
+  .video-thumb:hover .play-btn { transform: scale(1.12); }
+  .video-info { padding: 18px 20px; }
+  .video-info h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .video-info p { color: var(--muted); font-size: 0.85rem; }
+  .video-card .delete-btn {
+    position: absolute; top: 10px; right: 10px; z-index: 5;
+    background: rgba(239,68,68,0.9); color: #fff; border: none;
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+    font-size: 1rem; display: none; align-items: center; justify-content: center;
+    transition: 0.25s;
+  }
+  .video-card .delete-btn:hover { background: #ef4444; transform: scale(1.1); }
+  body.admin-logged .video-card .delete-btn { display: flex; }
+  .empty-state {
+    text-align: center; padding: 60px 20px; color: var(--muted);
+    border: 2px dashed rgba(124,58,237,0.3); border-radius: 16px; grid-column: 1 / -1;
+  }
+  .empty-state .big { font-size: 3rem; margin-bottom: 14px; }
+  .admin-section { display: none; }
+  .admin-section.show { display: block; }
+  .admin-panel {
+    max-width: 600px; margin: 0 auto;
+    background: var(--card); border-radius: 18px; padding: 40px 36px;
+    border: 1px solid rgba(124,58,237,0.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .admin-panel h2 { text-align: center; margin-bottom: 8px; font-size: 1.6rem; }
+  .admin-panel .sub { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; }
+  .field input {
+    width: 100%; padding: 13px 16px; border-radius: 10px;
+    background: var(--bg2); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text); font-size: 0.95rem; transition: 0.25s;
+  }
+  .field input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.2); }
+  .admin-panel .btn { width: 100%; padding: 14px; font-size: 1rem; margin-top: 6px; }
+  .error-msg { color: #ff6b6b; font-size: 0.88rem; text-align: center; margin-top: 14px; min-height: 20px; }
+  .success-msg { color: #4ade80; font-size: 0.88rem; text-align: center; margin-top: 14px; min-height: 20px; }
+  .admin-bar {
+    display: none; background: linear-gradient(90deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
+    border: 1px solid rgba(124,58,237,0.4); border-radius: 12px;
+    padding: 16px 22px; margin-bottom: 30px;
+    justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  body.admin-logged .admin-bar { display: flex; }
+  .admin-bar span { font-size: 0.95rem; }
+  .admin-bar .btn { padding: 8px 18px; font-size: 0.85rem; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; align-items: start; }
+  .contact-info h3 { font-size: 1.6rem; margin-bottom: 18px; }
+  .contact-info p { color: var(--muted); margin-bottom: 26px; }
+  .contact-item { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+  .contact-item .ico { font-size: 1.4rem; }
+  .contact-item h4 { font-size: 0.95rem; margin-bottom: 2px; }
+  .contact-item p { font-size: 0.88rem; color: var(--muted); margin: 0; }
+  .contact-form {
+    background: var(--card); border-radius: 18px; padding: 32px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .contact-form input, .contact-form textarea {
+    width: 100%; padding: 13px 16px; border-radius: 10px; margin-bottom: 16px;
+    background: var(--bg2); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text); font-size: 0.95rem; font-family: inherit; transition: 0.25s;
+  }
+  .contact-form input:focus, .contact-form textarea:focus {
+    outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.2);
+  }
+  .contact-form textarea { resize: vertical; min-height: 100px; }
+  footer { text-align: center; padding: 40px 6%; color: var(--muted); border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
+  footer .logo { font-size: 1.2rem; margin-bottom: 8px; display: inline-block; }
+  .modal { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 20px; }
+  .modal.show { display: flex; }
+  .modal-inner { width: 100%; max-width: 900px; aspect-ratio: 16/9; background: #000; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 0 60px rgba(124,58,237,0.5); }
+  .modal-inner iframe { width: 100%; height: 100%; border: none; }
+  .modal-close { position: absolute; top: -45px; right: 0; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
+  .reveal { opacity: 0; transform: translateY(30px); transition: 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .hero { padding-top: 100px; }
+    .about-visual { order: -1; }
+    section { padding: 70px 5%; }
+    nav { padding: 14px 5%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<nav>
+  <div class="logo">Science Relative</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#videos">Videos</a>
+    <a href="#contact">Contact</a>
+    <a href="#admin" class="btn btn-primary">Admin Login</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="tag">Welcome to Science Relative</span>
+      <h1>Cut. Color. <span class="gradient-text">Create Magic.</span></h1>
+      <p>A creative video editing platform — turning raw footage into scroll-stopping stories, reels, and cinematic edits.</p>
+      <div class="hero-btns">
+        <a href="#videos" class="btn btn-primary">Watch My Work</a>
+        <a href="#contact" class="btn btn-outline">Let's Talk</a>
+      </div>
+    </div>
+    <div class="code-card">
+      <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+      <div class="code-line"><span class="code-key">const</span> editor = <span class="code-str">"Science Relative"</span>;</div>
+      <div class="code-line"><span class="code-key">let</span> skills = [</div>
+      <div class="code-line">&nbsp;&nbsp;<span class="code-str">"Video Editing"</span>,</div>
+      <div class="code-line">&nbsp;&nbsp;<span class="code-str">"Reels & Shorts"</span>,</div>
+      <div class="code-line">&nbsp;&nbsp;<span class="code-str">"Color Grading"</span>,</div>
+      <div class="code-line">&nbsp;&nbsp;<span class="code-str">"Motion Graphics"</span></div>
+      <div class="code-line">];</div>
+      <div class="code-line"><span class="code-fn">console</span>.log(<span class="code-str">"Lights, Camera, Edit!"</span>);</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-head reveal">
+    <span class="tag">About Science Relative</span>
+    <h2>Turning Raw Footage Into <span class="gradient-text">Stories</span></h2>
+    <p>A passionate video editor focused on delivering clean, engaging and cinematic edits that people love to watch.</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <h3>Hi, I'm the Editor behind Science Relative 👋</h3>
+      <p>I craft videos that grab attention from the very first second. Whether it's a YouTube video, a fast-paced reel, or a cinematic edit — my goal is to make every frame count.</p>
+      <p>From cutting clips to color grading and adding motion graphics, I handle the full editing journey so creators can focus on content.</p>
+      <div class="about-stats">
+        <div class="stat"><h4>100+</h4><p>Videos Edited</p></div>
+        <div class="stat"><h4>50+</h4><p>Happy Clients</p></div>
+        <div class="stat"><h4>3+</h4><p>Years Experience</p></div>
+      </div>
+    </div>
+    <div class="about-visual reveal">
+      <div class="visual-box"><div class="ico">🎬</div><small>Cinematic Edits</small></div>
+      <div class="visual-box"><div class="ico">📱</div><small>Reels & Shorts</small></div>
+      <div class="visual-box"><div class="ico">🎨</div><small>Color Grading</small></div>
+      <div class="visual-box"><div class="ico">⚡</div><small>Fast Delivery</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-head reveal">
+    <span class="tag">What I Do</span>
+    <h2>My Skills & <span class="gradient-text">Services</span></h2>
+    <p>Everything needed to turn raw clips into polished, professional videos.</p>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal"><span class="ico">🎬</span><h3>Video Editing</h3><p>Clean cuts, smooth transitions and engaging pacing for YouTube videos and vlogs.</p></div>
+    <div class="skill-card reveal"><span class="ico">📱</span><h3>Reels & Shorts</h3><p>Trend-based, scroll-stopping vertical edits for Instagram, TikTok and YouTube Shorts.</p></div>
+    <div class="skill-card reveal"><span class="ico">🎨</span><h3>Color Grading</h3><p>Cinematic color correction and grading that gives footage a premium, moody look.</p></div>
+    <div class="skill-card reveal"><span class="ico">✨</span><h3>Motion Graphics</h3><p>Text animations, transitions and effects that make videos stand out.</p></div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="section-head reveal">
+    <span class="tag">My Work</span>
+    <h2>Featured <span class="gradient-text">Videos</span></h2>
+    <p>A collection of edits I've created. Click any video to watch it instantly.</p>
+  </div>
+
+  <div class="admin-bar" id="adminBar">
+    <span>🔓 Logged in as <strong>Admin</strong> — you can add or delete videos.</span>
+    <button class="btn btn-outline" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="admin-panel admin-section" id="addVideoPanel" style="margin-bottom:40px;">
+    <h2>➕ Add New Video</h2>
+    <p class="sub">Paste a YouTube link and give it a title.</p>
+    <div class="field"><label>Video Title</label><input type="text" id="videoTitle" placeholder="e.g. Cinematic Travel Reel"></div>
+    <div class="field"><label>YouTube Link</label><input type="text" id="videoLink" placeholder="e.g. https://www.youtube.com/watch?v=XXXXXXX"></div>
+    <button class="btn btn-primary" onclick="addVideo()">Add Video</button>
+    <div class="error-msg" id="videoMsg"></div>
+  </div>
+
+  <div class="videos-grid" id="videosGrid"></div>
+</section>
+
+<section id="admin">
+  <div class="section-head reveal">
+    <span class="tag">Admin Access</span>
+    <h2>Admin <span class="gradient-text">Login</span></h2>
+    <p>Only the site owner can log in here to manage videos.</p>
+  </div>
+  <div class="admin-panel admin-section show" id="loginPanel">
+    <h2>🔐 Admin Login</h2>
+    <p class="sub">Enter your credentials to manage videos.</p>
+    <div class="field"><label>Email</label><input type="email" id="loginUser" placeholder="Enter admin email"></div>
+    <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="Enter password"></div>
+    <button class="btn btn-primary" onclick="login()">Login</button>
+    <div class="error-msg" id="loginMsg"></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-head reveal">
+    <span class="tag">Get In Touch</span>
+    <h2>Let's Create Something <span class="gradient-text">Awesome</span></h2>
+    <p>Have footage that needs magic? Send a message and let's talk.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>Ready to start your project?</h3>
+      <p>Whether it's a reel, a YouTube video or a full cinematic edit — I'm here to help bring your vision to life.</p>
+      <div class="contact-item"><span class="ico">📧</span><div><h4>Email</h4><p>wzhkrux@gmail.com</p></div></div>
+      <div class="contact-item"><span class="ico">📱</span><div><h4>Instagram</h4><p>@Science Relative</p></div></div>
+      <div class="contact-item"><span class="ico">💬</span><div><h4>WhatsApp</h4><p>Available for quick chats</p></div></div>
+    </div>
+    <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mbgglnbo" method="POST">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="email" name="email" placeholder="Your Email" required>
+  <textarea name="message" placeholder="Your Message..." required></textarea>
+  <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+  <div class="success-msg" id="contactMsg"></div>
+</form>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Science Relative</div>
+  <p>© 2026 Science Relative — Crafted with passion for creators.</p>
+</footer>
+
+<div class="modal" id="videoModal">
+  <div class="modal-inner">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <iframe id="modalFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- ========== FIREBASE SDK ========== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* ============================================================
+           🔥 YOUR FIREBASE CONFIG HERE
+   ============================================================ */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBNWds4lFdQIbzsZGCTkqMwzClSjdCuB1A",
+  authDomain: "editor-guy.firebaseapp.com",
+  projectId: "editor-guy",
+  storageBucket: "editor-guy.firebasestorage.app",
+  messagingSenderId: "716783779272",
+  appId: "1:716783779272:web:43425c47e8d239e26a14fd"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let isAdmin = false;
+let allVideos = [];
+
+/* ============================================================
+   AUTH STATE LISTENER
+   ============================================================ */
+onAuthStateChanged(auth, user => {
+  isAdmin = !!user;
+  document.body.classList.toggle("admin-logged", isAdmin);
+  document.getElementById("loginPanel").classList.toggle("show", !isAdmin);
+  document.getElementById("addVideoPanel").classList.toggle("show", isAdmin);
+  if (user) {
+    document.getElementById("loginMsg").style.color = "#4ade80";
+    document.getElementById("loginMsg").textContent = "✅ Logged in successfully!";
+  }
+  renderVideos();
+});
+
+/* ============================================================
+   LOGIN / LOGOUT
+   ============================================================ */
+window.login = async function() {
+  const email = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value;
+  const msg = document.getElementById("loginMsg");
+  msg.textContent = "";
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    msg.style.color = "#4ade80";
+    msg.textContent = "✅ Login successful!";
+    document.getElementById("loginUser").value = "";
+    document.getElementById("loginPass").value = "";
+  } catch (e) {
+    msg.style.color = "#ff6b6b";
+    if (e.code === "auth/invalid-credential" || e.code === "auth/wrong-password" || e.code === "auth/user-not-found") {
+      msg.textContent = "❌ Wrong email or password.";
+    } else if (e.code === "auth/invalid-email") {
+      msg.textContent = "❌ Invalid email address.";
+    } else {
+      msg.textContent = "❌ Error: " + e.message;
+    }
+  }
+};
+
+window.logout = async function() {
+  await signOut(auth);
+  document.getElementById("loginMsg").style.color = "#4ade80";
+  document.getElementById("loginMsg").textContent = "You have been logged out.";
+};
+
+/* ============================================================
+   ADD / DELETE VIDEO
+   ============================================================ */
+function getYouTubeId(url) {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+window.addVideo = async function() {
+  const title = document.getElementById("videoTitle").value.trim();
+  const link = document.getElementById("videoLink").value.trim();
+  const msg = document.getElementById("videoMsg");
+
+  if (!isAdmin) { msg.style.color = "#ff6b6b"; msg.textContent = "❌ You must be logged in as admin."; return; }
+  if (!title) { msg.style.color = "#ff6b6b"; msg.textContent = "❌ Please enter a video title."; return; }
+  const ytId = getYouTubeId(link);
+  if (!ytId) { msg.style.color = "#ff6b6b"; msg.textContent = "❌ Invalid YouTube link."; return; }
+
+  try {
+    await addDoc(collection(db, "videos"), {
+      title: title,
+      ytId: ytId,
+      createdAt: serverTimestamp()
+    });
+    document.getElementById("videoTitle").value = "";
+    document.getElementById("videoLink").value = "";
+    msg.style.color = "#4ade80";
+    msg.textContent = "✅ Video added successfully!";
+  } catch (e) {
+    msg.style.color = "#ff6b6b";
+    msg.textContent = "❌ Error: " + e.message;
+  }
+};
+
+window.deleteVideo = async function(id) {
+  if (!isAdmin) return;
+  if (!confirm("Delete this video?")) return;
+  try { await deleteDoc(doc(db, "videos", id)); }
+  catch (e) { alert("Error: " + e.message); }
+};
+
+/* ============================================================
+   RENDER VIDEOS (live from Firestore)
+   ============================================================ */
+function renderVideos() {
+  const grid = document.getElementById("videosGrid");
+  if (allVideos.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="big">🎬</div>
+        <p>No videos yet.</p>
+        <p style="font-size:0.85rem;margin-top:8px;">${isAdmin ? "Add your first video using the form above." : "Check back soon!"}</p>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = allVideos.map(v => `
+    <div class="video-card">
+      ${isAdmin ? `<button class="delete-btn" onclick="deleteVideo('${v.id}')" title="Delete">✕</button>` : ""}
+      <div class="video-thumb" onclick="openModal('${v.ytId}')">
+        <img src="https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg" alt="${escapeHtml(v.title)}">
+        <div class="play-overlay"><div class="play-btn">▶</div></div>
+      </div>
+      <div class="video-info">
+        <h3>${escapeHtml(v.title)}</h3>
+        <p>Click to watch</p>
+      </div>
+    </div>
+  `).join("");
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+/* LIVE UPDATE from Firestore */
+const q = query(collection(db, "videos"), orderBy("createdAt", "desc"));
+onSnapshot(q, snap => {
+  allVideos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderVideos();
+}, err => {
+  console.error("Firestore error:", err);
+  document.getElementById("videosGrid").innerHTML = `
+    <div class="empty-state"><div class="big">⚠️</div>
+    <p>Could not load videos. Check Firebase config & rules.</p></div>`;
+});
+
+/* ============================================================
+   VIDEO MODAL
+   ============================================================ */
+window.openModal = function(ytId) {
+  document.getElementById("modalFrame").src = "https://www.youtube.com/embed/" + ytId + "?autoplay=1";
+  document.getElementById("videoModal").classList.add("show");
+};
+window.closeModal = function() {
+  document.getElementById("videoModal").classList.remove("show");
+  document.getElementById("modalFrame").src = "";
+};
+document.getElementById("videoModal").addEventListener("click", e => {
+  if (e.target.id === "videoModal") closeModal();
+});
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+/* ============================================================
+   CONTACT FORM (Formspree Integration)
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  const contactForm = document.getElementById("contactForm");
+  const msg = document.getElementById("contactMsg");
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", async function(e) {
+      e.preventDefault(); // Page reload hone se rokta hai
+      
+      const formData = new FormData(contactForm);
+      
+      msg.style.color = "#06b6d4"; // Cyan color
+      msg.textContent = "⏳ Sending message...";
+      
+      try {
+        const response = await fetch(contactForm.action, {
+          method: contactForm.method,
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          msg.style.color = "#4ade80"; // Green
+          msg.textContent = "✅ Message sent successfully! I'll get back to you soon.";
+          contactForm.reset(); // Form khali kar do
+        } else {
+          msg.style.color = "#ff6b6b"; // Red
+          msg.textContent = "❌ Oops! There was a problem sending your message.";
+        }
+      } catch (error) {
+        msg.style.color = "#ff6b6b";
+        msg.textContent = "❌ Network error. Please try again.";
+      }
+    });
+  }
+});
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) en.target.classList.add("visible"); });
+}, { threshold: 0.15 });
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
